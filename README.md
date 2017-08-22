@@ -112,6 +112,8 @@ export const getUsers = ()=>{
 
 
 
+![](https://raw.githubusercontent.com/tomsonTang/redux-saga-model-tutorial/master/assets/loading.png)
+
 ## 其他
 
 1. 详细案例  redux-saga-model [在线案例](https://tomsontang.github.io/redux-saga-model-tutorial/users-demo/build/index.html)
