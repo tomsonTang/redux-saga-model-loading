@@ -2,7 +2,8 @@ import { isFSA } from "flux-standard-action";
 
 const SHOW = "@SAGAMODEL_LOADING/SHOW";
 const HIDE = "@SAGAMODEL_LOADING/HIDE";
-const NAMESPACE = loading;
+const NAMESPACE = 'loading';
+const LOADING = 'LOADING'
 
 function createLoading(opts = {}) {
   const namespace = opts.namespace || NAMESPACE;
@@ -17,7 +18,7 @@ function createLoading(opts = {}) {
         if (isFSA(action)) {
           const { meta = {} } = action;
           const { namespace } = model;
-          if (meta.withLoading) {
+          if (meta[LOADING]) {
             yield put({ type: SHOW, payload: { namespace } });
             yield prevSaga(action);
             yield put({ type: HIDE, payload: { namespace } });
@@ -64,6 +65,6 @@ function createLoading(opts = {}) {
   };
 }
 
-export { createLoading };
+export { createLoading,LOADING };
 
 export default createLoading();
