@@ -32,7 +32,7 @@ import sagaModel from "reudx-saga-model";
 import Layout from "./view/Layout.jsx";
 import UsersTable from "./view/UsersTable.jsx";
 
-
+//加载插件
 sagaModel.use(loading);
 
 ReactDOM.render(
@@ -87,6 +87,7 @@ const mapStateToProps = state => {
   return {
     dataSource: usersState.list,
     count: usersState.count,
+    // 获取对应 namespace 下的 loading 状态
     loading:state.loading.models[dbNamespace]
   };
 };
@@ -103,7 +104,7 @@ export const getUsers = ()=>{
   return {
     type:'users/db/getUsers',
     payload:{},
-    //告诉插件将 users/db/getUsers 为这个副作用开启 loading
+    //告诉插件为 users/db/getUsers 这个副作用开启 loading
     meta:{ [LOADING]:true }
   }
 }
