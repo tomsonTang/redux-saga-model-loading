@@ -39,12 +39,12 @@ function createLoading(opts = {}) {
             ret = {
               ...state,
               global: true,
-              models: [...state.models, ([payload.namespace]: true)]
+              models: {...state.models, [payload.namespace]:true}
             };
             break;
 
           case HIDE:
-          const models = [...state.models, ([payload.namespace]: false)];
+          const models = {...state.models, [payload.namespace]: false};
           const global = Object.keys(models).some((namespace)=>{
             return models[namespace];
           });

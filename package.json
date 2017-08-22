@@ -1,16 +1,23 @@
 {
   "name": "redux-saga-model-loading",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "lib/plugin.js",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-preset-stage-0": "^6.24.1",
+    "rimraf": "^2.6.1"
   },
   "license": "MIT",
   "dependencies": {
     "flux-standard-action": "^1.2.0"
-  }
+  },
+  "scripts": {
+    "build": "rimraf lib && babel src --out-dir lib"
+  },
+  "description": "redux-saga-model 的 loading 插件",
+  "repository": "https://github.com/tomsonTang/redux-saga-model-loading.git",
+  "author": "tangzixiang <tomson_tang@yeah.net>"
 }
