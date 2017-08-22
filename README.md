@@ -103,6 +103,7 @@ export const getUsers = ()=>{
   return {
     type:'users/db/getUsers',
     payload:{},
+    //告诉插件将 users/db/getUsers 为这个副作用开启 loading
     meta:{ [LOADING]:true }
   }
 }
