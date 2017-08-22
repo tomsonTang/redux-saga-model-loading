@@ -19,6 +19,8 @@ $ yarn add redux-saga-model-loading
 
 ## 使用
 
+#### index.js
+
 ```jsx
 import React from "react";
 import ReactDOM from "react-dom";
@@ -41,6 +43,69 @@ ReactDOM.render(
   </Provider>,
   document.querySelector("#root")
 );
+```
+
+#### component.js
+
+```jsx
+import React from "react";
+import { Table, Input, Icon, Button, Popconfirm } from "antd";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { namespace as dbNamespace } from "../../db/dataModel.js";
+import * as action from "../../action.js";
+const columns = [
+    //...
+];
+
+class EditableTable extends React.Component {
+  constructor(props) {}
+
+  componentWillMount = () => {
+    this.props.getUsers();
+  };
+
+  render() {
+    const { dataSource,loading } = this.props;
+
+    const columns = this.columns;
+    return (
+      <div>
+        <Table bordered dataSource={dataSource} columns={columns} loading={loading}/>
+      </div>
+    );
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(action, dispatch);
+};
+
+const mapStateToProps = state => {
+  const usersState = state[dbNamespace];
+
+  return {
+    dataSource: usersState.list,
+    count: usersState.count,
+    loading:state.loading.models[dbNamespace]
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditableTable);
+```
+
+#### action.js
+
+```javascript
+import {LOADING} from 'redux-saga-model-loading'
+
+export const getUsers = ()=>{
+  return {
+    type:'users/db/getUsers',
+    payload:{},
+    meta:{ [LOADING]:true }
+  }
+}
 ```
 
 
