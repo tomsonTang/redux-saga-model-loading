@@ -1,6 +1,6 @@
 {
   "name": "redux-saga-model-loading",
-  "version": "0.0.77",
+  "version": "0.0.78",
   "main": "lib/plugin.js",
   "devDependencies": {
     "babel-eslint": "^7.2.3",

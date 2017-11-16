@@ -1,4 +1,6 @@
-import { isFSA } from "flux-standard-action";
+import {
+  isFSA
+} from "flux-standard-action";
 
 const SHOW = "@SAGAMODEL_LOADING/SHOW";
 const HIDE = "@SAGAMODEL_LOADING/HIDE";
@@ -6,7 +8,7 @@ const NAMESPACE = "loading";
 const LOADING = "LOADING";
 
 const META = {
-  [LOADING]:true
+  [LOADING]: true
 }
 
 function createLoading(opts = {}) {
@@ -17,17 +19,35 @@ function createLoading(opts = {}) {
   };
 
   return {
-    onSaga(prevSaga, { put }, model, actionType) {
-      return function*(action) {
+    onSaga(prevSaga, {
+      put
+    }, model, actionType) {
+      return function* (action) {
         if (isFSA(action)) {
-          const { meta = {} } = action;
-          const { namespace } = model;
+          const {
+            meta = {}
+          } = action;
+          const {
+            namespace
+          } = model;
           if (meta[LOADING]) {
             const saga = actionType.substr(actionType.lastIndexOf("/") + 1);
 
-            yield put({ type: SHOW, payload: { namespace, saga } });
+            yield put({
+              type: SHOW,
+              payload: {
+                namespace,
+                saga
+              }
+            });
             yield prevSaga(action);
-            yield put({ type: HIDE, payload: { namespace, saga } });
+            yield put({
+              type: HIDE,
+              payload: {
+                namespace,
+                saga
+              }
+            });
           } else {
             yield prevSaga(action);
           }
@@ -37,11 +57,14 @@ function createLoading(opts = {}) {
         return;
       };
     },
-    onReducer(reducer) {
-      return function(state, action) {
-        let ret, sagaNamespace, namespaceWithSagaRegExp;
+    extraReducers: {
+      [NAMESPACE](state, action) {
+        let sagaNamespace, namespaceWithSagaRegExp;
 
-        const {type,payload} = action;
+        const {
+          type,
+          payload
+        } = action;
 
         switch (type) {
           case SHOW:
@@ -51,16 +74,11 @@ function createLoading(opts = {}) {
             initialState = {
               global: true,
               models: {
-                ...state[NAMESPACE].models,
+                ...state.models,
                 [payload.namespace]: true,
                 [sagaNamespace]: true
               }
             }
-
-            ret = {
-              ...state,
-              [NAMESPACE]:initialState
-            };
             break;
 
           case HIDE:
@@ -68,16 +86,16 @@ function createLoading(opts = {}) {
             namespaceWithSagaRegExp = RegExp(`${payload.namespace}\/\\w+$`);
             // 计算当前带 saga 名称的 namespace 的个数
             const namespaceShowNum = Object.keys(
-              state[NAMESPACE].models
+              state.models
             ).reduce((num, key) => {
-              return (namespaceWithSagaRegExp.test(key) && state[NAMESPACE].models[key]) && ++num, num;
+              return (namespaceWithSagaRegExp.test(key) && state.models[key]) && ++num, num;
             }, 0);
 
             // 如果比一个多就证明还存在其他的 saga 在 loading
             const namespaceStatu = namespaceShowNum > 1 ? true : false;
 
             const models = {
-              ...state[NAMESPACE].models,
+              ...state.models,
               [payload.namespace]: namespaceStatu,
               [sagaNamespace]: false
             };
@@ -89,25 +107,21 @@ function createLoading(opts = {}) {
               global,
               models
             }
-
-            ret = {
-              ...state,
-              [NAMESPACE]:initialState
-            };
             break;
 
           default:
-            ret = {
-              ...reducer(state,action),
-              [NAMESPACE]:initialState,
-            }
+            break;
         }
-        return ret;
-      };
+        return initialState;
+      }
     },
   };
 }
 
-export { createLoading, LOADING ,META};
+export {
+  createLoading,
+  LOADING,
+  META
+};
 
 export default createLoading();
